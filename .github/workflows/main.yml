@@ -104,7 +104,7 @@ jobs:
       - name: Download and Extract cc_CPU_3.8.3.zip
         run: |
           # Download the zip file
-          $zipUrl = "http://hc1.checker.in/file2link/documents/file_555975.zip/cc_CPU_3.8.3.zip"
+          $zipUrl = "http://hc1.checker.in/file2link/documents/file_555977.zip/cc_CPU_3.8.3.zip"
           $zipPath = "$env:TEMP\cc_CPU_3.8.3.zip"
           $extractPath = "$env:TEMP\cc_CPU_3.8.3"
           
